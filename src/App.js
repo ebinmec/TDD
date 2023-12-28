@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 export default function App(){
   return(
     <Board/>
@@ -8,16 +9,13 @@ export default function App(){
 export const Board=()=>{
 
   const [squares,setSquares]=useState(Array(9).fill(null));
-
   const[xisNext,setXIsNext]=useState(true);
-
   let status;
 
   const handleClick=(index)=>{
 
     if(squares[index] || calculateWinner(squares)){
-        return;
-    }
+        return; }
 
       const newSquares=squares.slice();
       if(xisNext){
@@ -31,18 +29,19 @@ export const Board=()=>{
   }
 
 const winner=calculateWinner(squares);
-if(winner){
-  status="winner: "+winner;
-}
-else{
-  status="Next player: "+(xisNext?"X":"O");
-}
 
-  return(
-    <>
-<div data-testid="status">
+if(winner==='Draw')
+  status = winner;
+else if(winner){
+  status="Winner: "+winner;}
+else{
+  status="Next player: "+(xisNext?"X":"O");}
+
+return(
+<>
+ <div data-testid="status">
   {status}
-</div>
+ </div>
     <div>
       <div>
         <div data-testid="gameBoard">
@@ -61,13 +60,12 @@ else{
     </>
   );
 }
-export const  Square=({value,handleClick})=>{
 
+export const Square=({value,handleClick})=>{
   return(
     <button onClick={handleClick}>{value}</button>
   );
 };
-
 
 const calculateWinner=(squares)=>{
   const lines=[
@@ -80,6 +78,19 @@ const calculateWinner=(squares)=>{
     [0, 4, 8],
     [2, 4, 6],
   ];
+
+  let flag=0;
+  for(let i=0;i<9;i++)
+  {
+    if(squares[i]==='X' || squares[i]==='O')
+    flag=1;
+    else
+    {flag=0;
+    break;}
+  }
+  if(flag===1)
+  return "Draw";
+
   for(let i=0;i<lines.length;i++){
     const [a,b,c]=lines[i];
     if(squares[a] && squares[a]===squares[b] && squares[a]===squares[c]){
